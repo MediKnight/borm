@@ -3,6 +3,7 @@
 	<name>borm</name>
 	<comment></comment>
 	<projects>
+		<project>debo</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

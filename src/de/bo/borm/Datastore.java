@@ -83,6 +83,13 @@ public class Datastore {
             return connection;
         throw new SQLException("datastore not connected");
     }
+    
+    /**
+     * 
+     */
+    public void setConnection(Connection connection) {
+        this.connection = connection;   
+    }
 
     // ----------------------------------------------------------------------
 
