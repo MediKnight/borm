@@ -271,6 +271,11 @@ public class ObjectMapper {
             sb.append(" WHERE ");
             sb.append(whereClause);
         }
+        
+        if (q.getSuffix() != null) {
+            sb.append(" " + q.getSuffix());
+        }
+        
         return sb.toString();
     }
 

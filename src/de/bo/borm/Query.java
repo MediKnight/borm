@@ -14,6 +14,7 @@ public class Query {
     private Datastore datastore;
     private Class objectClass;
     private String query;
+    private String suffix;
     private Map values = new HashMap(5);
 
     /**
@@ -44,6 +45,25 @@ public class Query {
      */
     public void setQuery(String query) {
         this.query = query;
+    }
+
+    /**
+     * Allows appending a clause to the end of the actual sql statement. This
+     * is useful if you use an all-iterator, which does not use a query string.
+     * 
+     * @param suffix
+     */    
+    public void setSuffix(String suffix) {
+        this.suffix = suffix;   
+    }
+    
+    /**
+     * Return the statement suffix.
+     * 
+     * @return
+     */
+    public String getSuffix() {
+        return suffix;   
     }
 
     /**
