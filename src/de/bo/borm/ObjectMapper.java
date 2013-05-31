@@ -72,7 +72,7 @@ public class ObjectMapper {
     // ----------------------------------------------------------------------
 
     void insert(Connection connection, Storable object) throws SQLException {
-        List paramMappers = new ArrayList(12);
+        List<AttributeMapper> paramMappers = new ArrayList<AttributeMapper>(12);
         String ss = getInsertStatement(paramMappers);
         PreparedStatement stmt = connection.prepareStatement(ss);
         setup(stmt, object, paramMappers);
@@ -87,7 +87,7 @@ public class ObjectMapper {
 
     void update(Connection connection, Storable object) throws SQLException {
         if (! hasKey()) throw new SQLException("no primary key specified");
-        List paramMappers = new ArrayList(12);
+        List<AttributeMapper> paramMappers = new ArrayList<AttributeMapper>(12);
         String ss = getUpdateStatement(paramMappers);
         PreparedStatement stmt = connection.prepareStatement(ss);
         setup(stmt, object, paramMappers);
@@ -102,7 +102,7 @@ public class ObjectMapper {
 
     void delete(Connection connection, Storable object) throws SQLException {
         if (! hasKey()) throw new SQLException("no primary key specified");
-        List paramMappers = new ArrayList(12);
+        List<AttributeMapper> paramMappers = new ArrayList<AttributeMapper>(12);
         String ss = getDeleteStatement(paramMappers);
         PreparedStatement stmt = connection.prepareStatement(ss);
         setup(stmt, object, paramMappers);
@@ -117,7 +117,7 @@ public class ObjectMapper {
 
     void reload(Connection connection, Storable object) throws SQLException {
         if (! hasKey()) throw new SQLException("no primary key specified");
-        List paramMappers = new ArrayList(12);
+        List<AttributeMapper> paramMappers = new ArrayList<AttributeMapper>(12);
         PreparedStatement stmt = connection.prepareStatement(getReloadStatement(paramMappers));
         setup(stmt, object, paramMappers);
         ResultSet rs = stmt.executeQuery();
@@ -133,7 +133,7 @@ public class ObjectMapper {
 
     // ----------------------------------------------------------------------
 
-    private String getInsertStatement(List paramMappers)  {
+    private String getInsertStatement(List<AttributeMapper> paramMappers)  {
 
         StringBuffer sb = new StringBuffer();
         sb.append("INSERT INTO ");
@@ -155,7 +155,7 @@ public class ObjectMapper {
         return sb.toString();
     }
 
-    private String getUpdateStatement(List paramMappers) {
+    private String getUpdateStatement(List<AttributeMapper> paramMappers) {
         StringBuffer sb = new StringBuffer();
         sb.append("UPDATE ");
         sb.append(getTableName());
@@ -176,7 +176,7 @@ public class ObjectMapper {
         return sb.toString();
     }
 
-    private String getDeleteStatement(List paramMappers) {
+    private String getDeleteStatement(List<AttributeMapper> paramMappers) {
         StringBuffer sb = new StringBuffer();
         sb.append("DELETE FROM ");
         sb.append(getTableName());
@@ -184,7 +184,7 @@ public class ObjectMapper {
         return sb.toString();
     }
 
-    private String getReloadStatement(List paramMappers) {
+    private String getReloadStatement(List<AttributeMapper> paramMappers) {
         StringBuffer sb = new StringBuffer();
         sb.append("SELECT ");
         boolean first = true;
@@ -203,7 +203,7 @@ public class ObjectMapper {
         return sb.toString();
     }
 
-    private void keyWhereClause(StringBuffer sb, List paramMappers) {
+    private void keyWhereClause(StringBuffer sb, List<AttributeMapper> paramMappers) {
         sb.append(" WHERE ");
         boolean first = true;
         for (int i = 0; i < attributeMappers.length; i++) {
@@ -220,28 +220,28 @@ public class ObjectMapper {
         }
     }
 
-    private void setup(PreparedStatement stmt, Storable object, List paramMappers)
+    private void setup(PreparedStatement stmt, Storable object, List<AttributeMapper> paramMappers)
         throws SQLException {
 
-        Iterator i = paramMappers.iterator();
+        Iterator<AttributeMapper> i = paramMappers.iterator();
         int j = 1;
         while (i.hasNext())
-            ((AttributeMapper)i.next()).storeAttribute(j++, stmt, object);
+            i.next().storeAttribute(j++, stmt, object);
     }
 
     // ----------------------------------------------------------------------
 
-    Iterator select(Connection connection, Query q) throws SQLException {
-        List paramValues = new ArrayList();
+    Iterator<Object> select(Connection connection, Query q) throws SQLException {
+        List<Object> paramValues = new ArrayList<Object>();
         PreparedStatement stmt = connection.prepareStatement(getSelectStatement(q, paramValues));
         int j = 1;
-        for (Iterator i = paramValues.iterator(); i.hasNext(); ) {
+        for (Iterator<Object> i = paramValues.iterator(); i.hasNext(); ) {
             stmt.setObject(j++, i.next());
         }
         return new SelectIterator(stmt);
     }
 
-    private String getSelectStatement(Query q, List paramValues) throws SQLException {
+    private String getSelectStatement(Query q, List<Object> paramValues) throws SQLException {
         StringBuffer sb = new StringBuffer();
         sb.append("SELECT DISTINCT ");
         // add object's column names
@@ -253,13 +253,13 @@ public class ObjectMapper {
             sb.append(attributeMappers[i].getColumnName());
         }
 
-        Set tableNames = new HashSet();
+        Set<String> tableNames = new HashSet<String>();
         tableNames.add(getTableName());
         String whereClause = q.parseQuery(tableNames, paramValues);
 
         sb.append(" FROM ");
         boolean first = true;
-        for (Iterator i = tableNames.iterator(); i.hasNext();) {
+        for (Iterator<String> i = tableNames.iterator(); i.hasNext();) {
             if (first)
                 first = false;
             else
@@ -279,7 +279,7 @@ public class ObjectMapper {
         return sb.toString();
     }
 
-    class SelectIterator implements Iterator {
+    class SelectIterator implements Iterator<Object> {
         private ResultSet rs;
         private Statement stmt;
 
@@ -310,7 +310,6 @@ public class ObjectMapper {
         }
 
         public Object next() throws RuntimeSQLException {
-            boolean moreToCome = hasNext();
             alreadyAsked = null;
 
             try {
@@ -451,7 +450,7 @@ public class ObjectMapper {
             attributeMappers[i].setValue(object, values[i]);
     }
 
-    void bindValues(Map values, Storable object) {
+    void bindValues(Map<String, Object> values, Storable object) {
         for (int i = 0; i < attributeMappers.length; i++)
             values.put(attributeMappers[i].getAttributeName(),
                        attributeMappers[i].getValue(object));

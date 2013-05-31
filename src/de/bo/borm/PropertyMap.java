@@ -5,11 +5,11 @@ import java.util.*;
 import java.util.Iterator;
 import java.beans.*;
 
-public class PropertyMap implements Map {
+public class PropertyMap implements Map<String,Object> {
 
     private Object bean;
-    private Map getters;
-    private Map setters;
+    private Map<String, Method> getters;
+    private Map<String, Method> setters;
 
     public PropertyMap(Object bean) {
         if (bean == null)
@@ -17,8 +17,8 @@ public class PropertyMap implements Map {
         try {
             PropertyDescriptor[] pds;
             pds = Introspector.getBeanInfo(bean.getClass()).getPropertyDescriptors();
-            getters = new HashMap(pds.length);
-            setters = new HashMap(pds.length);
+            getters = new HashMap<String, Method>(pds.length);
+            setters = new HashMap<String, Method>(pds.length);
             for (int i = 0; i < pds.length; i++) {
                 String name = pds[i].getName();
                 getters.put(name, pds[i].getReadMethod());
@@ -72,7 +72,7 @@ public class PropertyMap implements Map {
      */
     public Object get(Object key) {
         try {
-            Method m = (Method)getters.get(key);
+            Method m = getters.get(key);
             if (m == null)
                 return null;
             return m.invoke(bean, null);
@@ -83,7 +83,7 @@ public class PropertyMap implements Map {
         }
     }
 
-    public Object put(Object key, Object value) {
+    public Object put(String key, Object value) {
         try {
             Method m = (Method)setters.get(key);
             if (m == null)
@@ -104,54 +104,54 @@ public class PropertyMap implements Map {
     // Bulk Operations
 
     public void putAll(Map t) {
-        Iterator i = t.entrySet().iterator();
+        Iterator<Map.Entry<String, Object>> i = t.entrySet().iterator();
         while (i.hasNext()) {
-            Map.Entry e = (Map.Entry)i.next();
+            Map.Entry<String, Object> e = i.next();
             put(e.getKey(), e.getValue());
         }
     }
 
     public void clear() {
-        Iterator i = keySet().iterator();
+        Iterator<String> i = keySet().iterator();
         while (i.hasNext())
             put(i.next(), null);
     }
 
     // Views
 
-    public Set keySet() {
+    public Set<String> keySet() {
         return getters.keySet();
     }
 
-    public Collection values() {
-        Collection c = new ArrayList(getters.size());
-        Iterator i = keySet().iterator();
+    public Collection<Object> values() {
+        Collection<Object> c = new ArrayList<Object>(getters.size());
+        Iterator<String> i = keySet().iterator();
         while (i.hasNext())
             c.add(get(i.next()));
         return c;
     }
 
-    public Set entrySet() {
-        Set s = new HashSet(getters.size());
-        Iterator i = keySet().iterator();
+    public Set<Map.Entry<String, Object>> entrySet() {
+        Set<Map.Entry<String, Object>> s = new HashSet<Map.Entry<String, Object>>(getters.size());
+        Iterator<String> i = keySet().iterator();
         while (i.hasNext()) {
-            Object key = i.next();
+            String key = i.next();
             s.add(new Entry(key, get(key)));
         }
         return s;
     }
 
-    private static class Entry implements Map.Entry {
+    private static class Entry implements Map.Entry<String, Object> {
 
-        private Object key;
+        private String key;
         private Object value;
 
-        private Entry(Object key, Object value) {
+        private Entry(String key, Object value) {
             this.key = key;
             this.value = value;
         }
 
-        public Object getKey() {
+        public String getKey() {
             return key;
         }
 
@@ -163,10 +163,7 @@ public class PropertyMap implements Map {
             throw new UnsupportedOperationException();
         }
 
-        public boolean equals(Object o) {
-            if (! (o instanceof Entry))
-                return false;
-            Map.Entry e = (Map.Entry)o;
+        public boolean equals(Map.Entry<String, Object> e) {
             return key == null ?
                 e.getKey() == null : key.equals(e.getKey()) &&
                 value == null ?

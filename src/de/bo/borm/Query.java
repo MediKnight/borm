@@ -97,7 +97,7 @@ public class Query {
     /**
      * Generates a valid SQL WHERE clause from the Query's query string.
      */
-    String parseQuery(Set tableNames, List paramValues) throws SQLException {
+    String parseQuery(Set<String> tableNames, List<Object> paramValues) throws SQLException {
         if (query == null || query.equals(""))
             return "";
 
