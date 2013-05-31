@@ -85,7 +85,7 @@ public class PropertyMap implements Map<String,Object> {
 
     public Object put(String key, Object value) {
         try {
-            Method m = (Method)setters.get(key);
+            Method m = setters.get(key);
             if (m == null)
                 throw new IllegalArgumentException("this property is read only or does not exist");
             return m.invoke(bean, new Object[]{ value });

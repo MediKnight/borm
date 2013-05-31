@@ -159,7 +159,7 @@ public class Datastore {
 
     // ----------------------------------------------------------------------
 
-    private Map objectMappings = new HashMap();
+    private Map<Class, ObjectMapper> objectMappings = new HashMap<Class, ObjectMapper>();
 
     /**
      * Registers an object mapping for use with this Datastore.
@@ -193,7 +193,7 @@ public class Datastore {
     protected ObjectMapper getMapper(Class clazz) throws SQLException {
         
         do {
-            ObjectMapper objectMapper = (ObjectMapper)objectMappings.get(clazz);
+            ObjectMapper objectMapper = objectMappings.get(clazz);
             if (objectMapper != null)
                 return objectMapper;
                 

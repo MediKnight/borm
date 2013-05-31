@@ -90,7 +90,7 @@ public class Query {
     /**
      * Executes the query and returns an Iterator to iterate the queried objects.
      */
-    public Iterator execute() throws SQLException {
+    public Iterator<Object> execute() throws SQLException {
         return datastore.getMapper(objectClass).select(datastore.getConnection(), this);
     }
 

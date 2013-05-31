@@ -11,6 +11,8 @@ import java.lang.ref.WeakReference;
 import java.util.*;
 import java.sql.SQLException;
 
+import de.bo.borm.ObjectMapper.Key;
+
 /**
  * This class implements a lightweight persistent object manager to which one
  * can add and remove storable objects.  It supports simple object-level
@@ -26,9 +28,9 @@ public class Objectstore {
     public static final Objectstore current = new Objectstore(Datastore.current);
 
     private Datastore datastore;
-    private Set deletionCandidates = new HashSet();
-    private Set additionCandidates = new HashSet();
-    private Map objectMap = Collections.synchronizedMap(new WeakHashMap());
+    private Set<Object> deletionCandidates = new HashSet<Object>();
+    private Set<Storable> additionCandidates = new HashSet<Storable>();
+    private Map<Storable, Object> objectMap = Collections.synchronizedMap(new WeakHashMap<Storable, Object>());
 
     /**
      * Constructs a new persistent object store.
@@ -97,7 +99,7 @@ public class Objectstore {
      */
     public synchronized void commit() {
         try {
-            Iterator i;
+            Iterator<Object> i;
             i = deletionCandidates.iterator();
             while (i.hasNext()) {
                 Storable object = (Storable)i.next();
@@ -118,7 +120,7 @@ public class Objectstore {
      * Reverts all changes and ignores additions and removals.
      */
     public synchronized void rollback() {
-        Iterator i = objectMap.values().iterator();
+        Iterator<Object> i = objectMap.values().iterator();
         while (i.hasNext()) {
             ((Cache)i.next()).rollback();
         }
@@ -268,21 +270,21 @@ public class Objectstore {
         return identity((Storable)i.next());
     }
 
-    private Map classMap = new HashMap();
+    private Map<ObjectMapper, Map> classMap = new HashMap<ObjectMapper, Map>();
 
     private Storable identity(Storable object) throws SQLException {
         ObjectMapper m = datastore.getMapper(object.getClass());
         ObjectMapper.Key key = m.getKey(object);
-        Map map = (Map)classMap.get(m);
+        Map<Key, WeakReference<Storable>> map = classMap.get(m);
         if (map == null) {
-            map = new HashMap();
-            map.put(key, new WeakReference(object));
+            map = new HashMap<Key, WeakReference<Storable>>();
+            map.put(key, new WeakReference<Storable>(object));
             classMap.put(m, map);
             return object;
         }
-        WeakReference existing = (WeakReference)map.get(key);
+        WeakReference existing = map.get(key);
         if (existing == null || existing.get() == null) {
-            map.put(key, new WeakReference(object));
+            map.put(key, new WeakReference<Storable>(object));
             return object;
         }
         return (Storable)existing.get();
