@@ -81,7 +81,7 @@ public class AttributeMapper {
      * mapper after adding it.  This method is used to initialize the
      * <code>AttributeAccess</code> object.
      */
-    protected void setObjectClass(Class objectClass) {
+    protected void setObjectClass(Class<?> objectClass) {
         access = access.make(attributeName, objectClass);
     }
 

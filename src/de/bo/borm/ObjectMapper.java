@@ -23,18 +23,18 @@ public class ObjectMapper {
 
     public static boolean debug = false;
 
-    private Class objectClass;
+    private Class<?> objectClass;
 
     private String tableName;
 
     private AttributeMapper[] attributeMappers = new AttributeMapper[0];
 
-    public ObjectMapper(Class objectClass, String tableName) {
+    public ObjectMapper(Class<?> objectClass, String tableName) {
         this.objectClass = objectClass;
         this.tableName = tableName;
     }
 
-    public Class getObjectClass() {
+    public Class<?> getObjectClass() {
         return objectClass;
     }
 
@@ -231,7 +231,7 @@ public class ObjectMapper {
 
     // ----------------------------------------------------------------------
 
-    Iterator<Object> select(Connection connection, Query q) throws SQLException {
+    Iterator<Storable> select(Connection connection, Query q) throws SQLException {
         List<Object> paramValues = new ArrayList<Object>();
         PreparedStatement stmt = connection.prepareStatement(getSelectStatement(q, paramValues));
         int j = 1;
@@ -279,7 +279,7 @@ public class ObjectMapper {
         return sb.toString();
     }
 
-    class SelectIterator implements Iterator<Object> {
+    class SelectIterator implements Iterator<Storable> {
         private ResultSet rs;
         private Statement stmt;
 
@@ -309,7 +309,7 @@ public class ObjectMapper {
             return alreadyAsked.booleanValue();
         }
 
-        public Object next() throws RuntimeSQLException {
+        public Storable next() throws RuntimeSQLException {
             alreadyAsked = null;
 
             try {
@@ -450,7 +450,7 @@ public class ObjectMapper {
             attributeMappers[i].setValue(object, values[i]);
     }
 
-    void bindValues(Map<String, Object> values, Storable object) {
+    void bindValues(Map<Object, Object> values, Storable object) {
         for (int i = 0; i < attributeMappers.length; i++)
             values.put(attributeMappers[i].getAttributeName(),
                        attributeMappers[i].getValue(object));

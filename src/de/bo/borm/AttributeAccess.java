@@ -27,7 +27,7 @@ public interface AttributeAccess {
      * are their own factories and this object makes new instances using the
      * specified <code>attributeName</code> and <code>objectClass</code>.
      */
-    public AttributeAccess make(String attributeName, Class objectClass);
+    public AttributeAccess make(String attributeName, Class<?> objectClass);
 
     public static final AttributeAccess FIELD = new FieldAccess();
     public static final AttributeAccess METHOD = new MethodAccess();
@@ -39,7 +39,7 @@ public interface AttributeAccess {
         private FieldAccess() {
         }
 
-        private FieldAccess(String attributeName, Class objectClass) {
+        private FieldAccess(String attributeName, Class<?> objectClass) {
             try {
                 field = objectClass.getDeclaredField(attributeName);
                 field.setAccessible(true);
@@ -48,7 +48,7 @@ public interface AttributeAccess {
             }
         }
 
-        public AttributeAccess make(String attributeName, Class objectClass) {
+        public AttributeAccess make(String attributeName, Class<?> objectClass) {
             return new FieldAccess(attributeName, objectClass);
         }
 
@@ -84,7 +84,7 @@ public interface AttributeAccess {
         private MethodAccess() {
         }
 
-        private MethodAccess(String attributeName, Class objectClass) {
+        private MethodAccess(String attributeName, Class<?> objectClass) {
             String name =  capitalize(attributeName);
             try {
                 getter = objectClass.getMethod("get" + name, null);
@@ -102,7 +102,7 @@ public interface AttributeAccess {
             }
         }
 
-        public AttributeAccess make(String attributeName, Class objectClass) {
+        public AttributeAccess make(String attributeName, Class<?> objectClass) {
             return new MethodAccess(attributeName, objectClass);
         }
 

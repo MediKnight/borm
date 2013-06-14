@@ -16,7 +16,7 @@ public class ObjectAutoMapper extends ObjectMapper {
      * Constructs a new object mapper for storable objects of the specified class.
      * @param objectClass the class for which the mapping shall be generated
      */
-    public ObjectAutoMapper(Class objectClass) {
+    public ObjectAutoMapper(Class<?> objectClass) {
         super(objectClass, getName(objectClass));
         createAttributeMappers(objectClass);
     }
@@ -26,7 +26,7 @@ public class ObjectAutoMapper extends ObjectMapper {
      * package prefix.
      * @return a table name for the specified class.
      */
-    private static String getName(Class objectClass) {
+    private static String getName(Class<?> objectClass) {
         String name = objectClass.getName();
         int i = name.lastIndexOf('$');
         if (i == -1)
@@ -47,7 +47,7 @@ public class ObjectAutoMapper extends ObjectMapper {
      * @see AttributeMapper
      * @see AttributeAccess
      */
-    protected void createAttributeMappers(Class objectClass) {
+    protected void createAttributeMappers(Class<?> objectClass) {
         if (objectClass.getSuperclass() != Object.class)
             createAttributeMappers(objectClass.getSuperclass());
         Field[] fields = objectClass.getDeclaredFields();
@@ -70,7 +70,7 @@ public class ObjectAutoMapper extends ObjectMapper {
      * @param type the class type for which we need an <code>AttributeType</code>.
      * @return the attribute type mapping strategy.
      */
-    private AttributeType getAttributeType(Class type) {
+    private AttributeType getAttributeType(Class<?> type) {
         if (type == Integer.TYPE || type == Integer.class)
             return AttributeType.INTEGER;
         if (type == Double.TYPE || type == Double.class)

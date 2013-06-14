@@ -227,7 +227,7 @@ public class Objectstore {
     /**
      * Returns an iterator on all persistent instances.
      */
-    public Iterator extent(Class clazz) throws SQLException {
+    public Iterator<Object> extent(Class<?> clazz) throws SQLException {
         return new IdentityIterator(datastore.getQuery(clazz).execute());
     }
 
@@ -263,8 +263,8 @@ public class Objectstore {
      *   }
      * }</pre>
      */
-    public Storable getReference(Class clazz, String query, Storable object) throws SQLException {
-        Iterator i = datastore.getQuery(clazz, query).bind(object).execute();
+    public Storable getReference(Class<?> clazz, String query, Storable object) throws SQLException {
+        Iterator<Storable> i = datastore.getQuery(clazz, query).bind(object).execute();
         if (!i.hasNext())
             return null;
         return identity((Storable)i.next());

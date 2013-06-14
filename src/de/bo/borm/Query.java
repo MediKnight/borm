@@ -12,10 +12,10 @@ import java.sql.*;
 public class Query {
 
     private Datastore datastore;
-    private Class objectClass;
+    private Class<?> objectClass;
     private String query;
     private String suffix;
-    private Map values = new HashMap(5);
+    private Map<Object, Object> values = new HashMap<Object, Object>(5);
 
     /**
      * Constructs a new query object connnected to the specified datastore.
@@ -29,7 +29,7 @@ public class Query {
      *
      * @param objectClass the object class, it must implement <code>Storable</code>
      */
-    public void setObjectClass(Class objectClass) {
+    public void setObjectClass(Class<?> objectClass) {
         this.objectClass = objectClass;
     }
 
@@ -90,7 +90,7 @@ public class Query {
     /**
      * Executes the query and returns an Iterator to iterate the queried objects.
      */
-    public Iterator<Object> execute() throws SQLException {
+    public Iterator<Storable> execute() throws SQLException {
         return datastore.getMapper(objectClass).select(datastore.getConnection(), this);
     }
 
@@ -133,7 +133,7 @@ public class Query {
                 while (i < query.length() && Character.isJavaIdentifierPart(ch = query.charAt(i++)))
                     buf.append(ch);
                 i--;
-                Class clazz = objectClass;
+                Class<?> clazz = objectClass;
                 String attributeName = buf.toString();
                 int j = attributeName.indexOf('.');
                 if (j != -1) {

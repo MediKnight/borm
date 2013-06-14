@@ -138,11 +138,11 @@ public class Datastore {
 
     // ----------------------------------------------------------------------
 
-    public Query getQuery(Class objectClass) {
+    public Query getQuery(Class<?> objectClass) {
         return getQuery(objectClass, null);
     }
 
-    public Query getQuery(Class objectClass, String query) {
+    public Query getQuery(Class<?> objectClass, String query) {
         Query q = new Query(this);
         q.setObjectClass(objectClass);
         q.setQuery(query);
@@ -159,7 +159,7 @@ public class Datastore {
 
     // ----------------------------------------------------------------------
 
-    private Map<Class, ObjectMapper> objectMappings = new HashMap<Class, ObjectMapper>();
+    private Map<Class<?>, ObjectMapper> objectMappings = new HashMap<Class<?>, ObjectMapper>();
 
     /**
      * Registers an object mapping for use with this Datastore.
@@ -178,7 +178,7 @@ public class Datastore {
      *
      * @param objectClass the class which shall be auto mapped
      */
-    public void register(Class objectClass) {
+    public void register(Class<?> objectClass) {
         register(new ObjectAutoMapper(objectClass));
     }
 
@@ -190,7 +190,7 @@ public class Datastore {
      * @return the registred object mapping
      * @exception SQLException if no mapping has need registered
      */
-    protected ObjectMapper getMapper(Class clazz) throws SQLException {
+    protected ObjectMapper getMapper(Class<?> clazz) throws SQLException {
         
         do {
             ObjectMapper objectMapper = objectMappings.get(clazz);
