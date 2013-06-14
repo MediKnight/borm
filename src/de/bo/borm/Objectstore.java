@@ -227,22 +227,22 @@ public class Objectstore {
     /**
      * Returns an iterator on all persistent instances.
      */
-    public Iterator<Object> extent(Class<?> clazz) throws SQLException {
+    public Iterator<Storable> extent(Class<?> clazz) throws SQLException {
         return new IdentityIterator(datastore.getQuery(clazz).execute());
     }
 
-    private class IdentityIterator implements Iterator {
-        private Iterator i;
-        IdentityIterator(Iterator i) {
+    private class IdentityIterator implements Iterator<Storable> {
+        private Iterator<Storable> i;
+        IdentityIterator(Iterator<Storable> i) {
             this.i = i;
         }
         public boolean hasNext() throws RuntimeSQLException {
             return i.hasNext();
         }
 
-        public Object next() throws RuntimeSQLException {
+        public Storable next() throws RuntimeSQLException {
             try {
-                return identity((Storable)i.next());
+                return identity(i.next());
             } catch (SQLException e) {
                 throw new RuntimeSQLException(e);
             }

@@ -537,7 +537,7 @@ public class Tracer
     // data with no chance to change this behavior.
     int n = p.size();
     String[] pna = new String[n];
-    Enumeration e = p.propertyNames();
+    Enumeration<?> e = p.propertyNames();
     for ( int i=0; i<n; i++ )
       pna[i] = e.nextElement().toString();
 
