@@ -79,7 +79,9 @@ public class Tester {
 
     static class Page extends StorableObject implements java.io.Serializable {
 
-        static java.text.DateFormat fmt = new java.text.SimpleDateFormat("dd-MMM-yyyy HH:mm");
+		private static final long serialVersionUID = 1L;
+
+		static java.text.DateFormat fmt = new java.text.SimpleDateFormat("dd-MMM-yyyy HH:mm");
 
         // persistent attributes
         int id;

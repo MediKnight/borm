@@ -270,7 +270,8 @@ public class Objectstore {
         return identity((Storable)i.next());
     }
 
-    private Map<ObjectMapper, Map> classMap = new HashMap<ObjectMapper, Map>();
+    private Map<ObjectMapper, Map<Key, WeakReference<Storable>>> classMap =
+    		new HashMap<ObjectMapper, Map<Key, WeakReference<Storable>>>();
 
     private Storable identity(Storable object) throws SQLException {
         ObjectMapper m = datastore.getMapper(object.getClass());
@@ -282,7 +283,7 @@ public class Objectstore {
             classMap.put(m, map);
             return object;
         }
-        WeakReference existing = map.get(key);
+        WeakReference<Storable> existing = map.get(key);
         if (existing == null || existing.get() == null) {
             map.put(key, new WeakReference<Storable>(object));
             return object;

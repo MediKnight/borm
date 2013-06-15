@@ -75,7 +75,7 @@ public class PropertyMap implements Map<String,Object> {
             Method m = getters.get(key);
             if (m == null)
                 return null;
-            return m.invoke(bean, null);
+            return m.invoke(bean, (Object[]) null);
         } catch (InvocationTargetException e) {
             throw runtimify(e);
         } catch (IllegalAccessException e) {
@@ -103,11 +103,11 @@ public class PropertyMap implements Map<String,Object> {
 
     // Bulk Operations
 
-    public void putAll(Map t) {
-        Iterator<Map.Entry<String, Object>> i = t.entrySet().iterator();
+    public void putAll(Map<? extends String, ? extends Object> t) {
+        Iterator<?> i = t.entrySet().iterator();
         while (i.hasNext()) {
-            Map.Entry<String, Object> e = i.next();
-            put(e.getKey(), e.getValue());
+            Map.Entry<?, ?> e = (Map.Entry<?, ?>) i.next();
+            put((String) e.getKey(), (Object) e.getValue());
         }
     }
 
@@ -190,7 +190,8 @@ public class PropertyMap implements Map<String,Object> {
         if (e.getTargetException() instanceof RuntimeException)
             return (RuntimeException)e.getTargetException();
         return new RuntimeException() {
-            public Throwable getTargetException() {
+			private static final long serialVersionUID = 1L;
+			public Throwable getTargetException() {
                 return e;
             }
         };

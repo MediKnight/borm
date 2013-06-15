@@ -87,10 +87,10 @@ public interface AttributeAccess {
         private MethodAccess(String attributeName, Class<?> objectClass) {
             String name =  capitalize(attributeName);
             try {
-                getter = objectClass.getMethod("get" + name, null);
+                getter = objectClass.getMethod("get" + name, (Class<?>[]) null);
             } catch (NoSuchMethodException e) {
                 try {
-                    getter = objectClass.getMethod("is" + name, null);
+                    getter = objectClass.getMethod("is" + name, (Class<?>[]) null);
                 } catch (NoSuchMethodException ee) {
                     throw new InternalError("can't create accessor - no public getter method found for " + attributeName);
                 }
@@ -108,7 +108,7 @@ public interface AttributeAccess {
 
         public Object getValue(Storable data) {
             try {
-                return getter.invoke(data, null);
+                return getter.invoke(data, (Object[]) null);
             } catch (InvocationTargetException e) {
                 throw new InternalError("exception while calling getter " + getter.getName());
             } catch (IllegalAccessException e) {

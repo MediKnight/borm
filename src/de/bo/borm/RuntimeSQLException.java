@@ -6,7 +6,9 @@ package de.bo.borm;
  */
 public class RuntimeSQLException extends RuntimeException {
 
-    private Throwable exception;
+	private static final long serialVersionUID = 1L;
+	
+	private Throwable exception;
 
     public RuntimeSQLException(Throwable exception) {
         this.exception = exception;

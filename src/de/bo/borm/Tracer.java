@@ -481,11 +481,13 @@ public class Tracer
                 PrintWriter pw = (PrintWriter)o;
                 pw.println(s);
                 pw.flush();
+                pw.close();
             }
             if ( o instanceof OutputStream ) {
                 PrintWriter pw = new PrintWriter((OutputStream)o);
                 pw.println(s);
                 pw.flush();
+                pw.close();
             }
             if ( o instanceof String ) {
                 try {
