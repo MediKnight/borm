@@ -163,13 +163,6 @@ public class PropertyMap implements Map<String,Object> {
             throw new UnsupportedOperationException();
         }
 
-        public boolean equals(Map.Entry<String, Object> e) {
-            return key == null ?
-                e.getKey() == null : key.equals(e.getKey()) &&
-                value == null ?
-                    e.getValue() == null : value.equals(e.getValue());
-        }
-
         public int hashCode() {
             return key == null ? 0 : key.hashCode() ^
                 (value == null ? 0 : value.hashCode());
@@ -187,13 +180,15 @@ public class PropertyMap implements Map<String,Object> {
     }
 
     private RuntimeException runtimify(final InvocationTargetException e) {
-        if (e.getTargetException() instanceof RuntimeException)
+    	Throwable cause = e.getCause();
+    	
+    	if (cause == null) {
+    		return new RuntimeException();
+    	}
+        if (cause instanceof RuntimeException) {
             return (RuntimeException)e.getTargetException();
-        return new RuntimeException() {
-			private static final long serialVersionUID = 1L;
-			public Throwable getTargetException() {
-                return e;
-            }
-        };
+        }
+        
+        return new RuntimeException(cause);
     }
 }
