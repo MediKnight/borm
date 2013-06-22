@@ -1,5 +1,5 @@
 
-package de.bo.borm;
+package de.baltic_online.borm;
 
 public class PersistentObject implements Storable {
 

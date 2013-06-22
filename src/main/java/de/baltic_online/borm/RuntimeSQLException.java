@@ -1,4 +1,4 @@
-package de.bo.borm;
+package de.baltic_online.borm;
 
 /**
  * @author sma@baltic-online.de

@@ -1,6 +1,6 @@
-package de.bo.borm.test;
+package de.baltic_online.borm;
 
-import de.bo.borm.*;
+import de.baltic_online.borm.*;
 import java.sql.SQLException;
 import java.util.*;
 import java.sql.Date;
@@ -11,7 +11,7 @@ import java.sql.Date;
  * @author sma@baltic-online.de
  * @version 1.0
  */
-public class Tester {
+public class BormTest {
 
     static void loadDriver(String className) {
         try {

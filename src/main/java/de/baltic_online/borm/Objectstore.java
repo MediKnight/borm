@@ -5,13 +5,13 @@
  *  - add automatic 1:n, 0:1 mappings
  *  - implement reload strategy
  */
-package de.bo.borm;
+package de.baltic_online.borm;
 
 import java.lang.ref.WeakReference;
 import java.util.*;
 import java.sql.SQLException;
 
-import de.bo.borm.ObjectMapper.Key;
+import de.baltic_online.borm.ObjectMapper.Key;
 
 /**
  * This class implements a lightweight persistent object manager to which one

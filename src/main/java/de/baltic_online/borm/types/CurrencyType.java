@@ -2,14 +2,14 @@
  * (c) Copyright 2002 Baltic Online Computer GmbH
  * All Rights Reserved.
  */
-package de.bo.borm.types;
+package de.baltic_online.borm.types;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import de.bo.base.util.CurrencyNumber;
-import de.bo.borm.AttributeType;
+import de.baltic_online.base.util.CurrencyNumber;
+import de.baltic_online.borm.AttributeType;
 
 /**
  * @version 	1.0

@@ -1,10 +1,10 @@
-package de.bo.borm;
+package de.baltic_online.borm;
 
 import java.sql.SQLException;
 
 /**
  * Useful superclass of all domain classes of database-storable objects.
- * @see de.bo.boorm.Storable
+ * @see de.baltic_online.boorm.Storable
  *
  * @author sma@baltic-online.de
  * @version 1.0

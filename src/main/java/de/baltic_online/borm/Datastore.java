@@ -1,4 +1,4 @@
-package de.bo.borm;
+package de.baltic_online.borm;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

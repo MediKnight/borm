@@ -3,7 +3,7 @@
  *
  * (C)2000 Baltic Online Computer GmbH
  */
-package de.bo.borm;
+package de.baltic_online.borm;
 
 import java.io.*;
 import java.text.*;
