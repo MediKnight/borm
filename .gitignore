@@ -1,3 +1,4 @@
 target
 /junit-4.11.jar
 .classpath
+/target/
